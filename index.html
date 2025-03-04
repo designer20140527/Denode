@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="assets/images/logo-transparent.png">
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroImage = document.querySelector('.hero-image');
+            const container = document.querySelector('main');
+            
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xPercent = ((x / rect.width) - 0.5) * 2;
+                const yPercent = ((y / rect.height) - 0.5) * 2;
+                
+                heroImage.style.transform = `
+                    perspective(1000px)
+                    rotateY(${xPercent * 5}deg)
+                    rotateX(${-yPercent * 5}deg)
+                `;
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+
+            // 添加滚动动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.content-section').forEach((section) => {
+                observer.observe(section);
+            });
+
+            // How It Works 滚动动画
+            const howItWorksSection = document.querySelector('.how-it-works');
+            const rentContent = document.getElementById('rent-content');
+            const shareContent = document.getElementById('share-content');
+            const logoImage = document.getElementById('logo-image');
+            const illustrationImage = document.getElementById('illustration-image');
+
+            // 设置初始状态
+            rentContent.style.opacity = 1;
+            rentContent.style.visibility = 'visible';
+            logoImage.style.opacity = 1;
+            logoImage.style.visibility = 'visible';
+
+            window.addEventListener('scroll', () => {
+                // 只在大于767px的屏幕上执行动画
+                if (!howItWorksSection || window.innerWidth <= 767) return;
+
+                const rect = howItWorksSection.getBoundingClientRect();
+                const sectionHeight = howItWorksSection.offsetHeight;
+                const windowHeight = window.innerHeight;
+                
+                const scrollProgress = Math.max(0, Math.min(1, 
+                    (window.innerHeight / 2 - rect.top) / (sectionHeight / 2)
+                ));
+
+                if (scrollProgress >= 0 && scrollProgress <= 1) {
+                    // 桌面端渐变效果
+                    if (scrollProgress < 0.5) {
+                        rentContent.style.opacity = 1;
+                        shareContent.style.opacity = 0;
+                        logoImage.style.opacity = 1;
+                        illustrationImage.style.opacity = 0;
+                        
+                        rentContent.style.visibility = 'visible';
+                        shareContent.style.visibility = 'hidden';
+                        logoImage.style.visibility = 'visible';
+                        illustrationImage.style.visibility = 'hidden';
+                    } else {
+                        const fadeProgress = (scrollProgress - 0.5) / 0.2;
+                        
+                        rentContent.style.opacity = Math.max(0, 1 - fadeProgress);
+                        shareContent.style.opacity = Math.min(1, fadeProgress);
+                        logoImage.style.opacity = Math.max(0, 1 - fadeProgress);
+                        illustrationImage.style.opacity = Math.min(1, fadeProgress);
+
+                        if (fadeProgress >= 0.5) {
+                            rentContent.style.visibility = 'hidden';
+                            shareContent.style.visibility = 'visible';
+                            logoImage.style.visibility = 'hidden';
+                            illustrationImage.style.visibility = 'visible';
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body style="scroll-behavior: smooth">
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/images/logo-transparent.png" alt="Denode Logo">
+                <span>Denode</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">HOME</a>
+                <a href="#about">ABOUT</a>
+                <a href="#how-it-works">HOW IT WORKS</a>
+                <a href="#community">COMMUNITY</a>
+            </div>
+            <div class="deploy-btn-container">
+                <button class="deploy-btn">GITBOOK</button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="home">
+        <video class="background-video" autoplay muted loop playsinline>
+            <source src="assets/images/bgv.mp4" type="video/mp4">
+        </video>
+        <div class="main-container">
+            <section class="hero-section">
+                <div class="hero">
+                    <h1>Rent & Share GPU Power With Ease</h1>
+                    <p class="subtitle">
+                        AI training is too slow, but high-end GPUs are way too expensive? Have idle GPUs but don't know how to make money from them? Renting a GPU is a hassle—expensive, complex, and requires setting up everything yourself? No worries — Denode is here to solve it all! With our Telegram Bot, renting and sharing GPU power has never been this simple!
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="https://x.com/Denode_Coin" target="_blank" rel="noopener noreferrer">
+                            <button class="primary-btn">TWITTER</button>
+                        </a>
+                        <a href="https://t.me/Denode_Official" target="_blank" rel="noopener noreferrer">
+                            <button class="secondary-btn">TELEGRAM</button>
+                        </a>
+                        <button class="deploy-btn mobile-gitbook-btn">GITBOOK</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/images/image1.png" alt="GPU Illustration">
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <section id="about" class="content-section what-is">
+        <div class="section-container">
+            <h2>What is Denode?</h2>
+            <p>
+                Denode is a decentralized GPU-sharing platform that lets you rent GPU power instantly via Telegram, with transparent hourly pricing and no hidden fees. You can also connect your own GPU to Denode and start earning effortlessly—our platform automatically matches your hardware with demand, so you can make passive income with zero technical hassle. No servers, no complicated setups—just send a command to the bot, and you're good to go!
+            </p>
+        </div>
+    </section>
+
+    <section class="content-section features">
+        <div class="section-container">
+            <div class="features-layout">
+                <!-- 左侧内容 -->
+                <div class="features-intro">
+                    <div class="feature-card main-card">
+                        <h2>Why Choose Denode?</h2>
+                        <p>
+                            No matter if you're an AI developer, data scientist, video editor, or someone with spare GPUs lying around, Denode provides the most efficient and cost-effective solution for computing power!
+                        </p>
+                        <div class="card-image">
+                            <img src="assets/images/image2.png" alt="Feature Illustration">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧卡片列表 -->
+                <div class="features-list">
+                    <div class="feature-card">
+                        <div class="icon-container">
+                            <div class="card-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 12L12 17L22 12" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>One-Click Rentals</h3>
+                        </div>
+                        <p>Need AI training? Just select a GPU via Telegram—no accounts, no sign-ups!</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-container">
+                            <div class="card-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 1V23" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>50%+ Cheaper Than Cloud Providers</h3>
+                        </div>
+                        <p>Pay only for what you use, and save big compared to AWS & Google Cloud!</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-container">
+                            <div class="card-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="#4a76ff" stroke-width="2"/>
+                                    <path d="M6 8H8V10H6V8Z" fill="#4a76ff"/>
+                                    <path d="M16 8H18V10H16V8Z" fill="#4a76ff"/>
+                                    <path d="M11 14H13V16H11V14Z" fill="#4a76ff"/>
+                                </svg>
+                            </div>
+                            <h3>Earn from Your Idle GPU</h3>
+                        </div>
+                        <p>Turn your GPU into a money-making machine, Denode automatically assigns tasks, so you can earn with zero effort!</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-container">
+                            <div class="card-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L19 21L12 17L5 21L12 2Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>Super Fast Deployment</h3>
+                        </div>
+                        <p>Select, deploy, and start computing in seconds!</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-container">
+                            <div class="card-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>Secure & Private</h3>
+                        </div>
+                        <p>Distributed processing and encrypted transactions keep your data safe and protected.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="how-it-works-container">
+            <!-- 左侧内容 -->
+            <div class="content-side">
+                <!-- 第一屏内容 -->
+                <div class="content-block" id="rent-content">
+                    <h2>How Does It Work?</h2>
+                    <div class="steps-list">
+                        <h3>Rent a GPU</h3>
+                        <div class="step-item">
+                            <span class="step-number">1</span>
+                            <span>Open the Telegram bot 👉 /start</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">2</span>
+                            <span>Choose your GPU specs & task</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">3</span>
+                            <span>Pay as you go (billed per second, stop anytime!)</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">4</span>
+                            <span>Get computing power instantly and start running your workload!</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第二屏内容 -->
+                <div class="content-block" id="share-content">
+                    <h2>How Does It Work?</h2>
+                    <div class="steps-list">
+                        <h3>Share Your GPU & Earn</h3>
+                        <div class="step-item">
+                            <span class="step-number">1</span>
+                            <span>Connect your device to Denode</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">2</span>
+                            <span>Set your price & availability</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">3</span>
+                            <span>Start earning—Denode automatically matches jobs to your GPU!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧图片 -->
+            <div class="image-side">
+                <img src="assets/images/image3.png" alt="Denode Logo" id="logo-image">
+                <img src="assets/images/image4.png" alt="GPU Illustration" id="illustration-image">
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section use-cases">
+        <div class="section-container">
+            <h2>What Can You Use Denode For?</h2>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L20 6V18L12 22L4 18V6L12 2Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 22V14" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20 6L12 10L4 6" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 10L12 14" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="14" r="2" stroke="#4a76ff" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Train deep learning models without expensive hardware!</p>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 10L20 5L15 10ZM20 5L15 0L20 5ZM20 5V15V5Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 19V5C4 4.46957 4.21071 3.96086 4.58579 3.58579C4.96086 3.21071 5.46957 3 6 3H15" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 19C4 19.5304 4.21071 20.0391 4.58579 20.4142C4.96086 20.7893 5.46957 21 6 21H18C18.5304 21 19.0391 20.7893 19.4142 20.4142C19.7893 20.0391 20 19.5304 20 19V15" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Video Rendering & 3D Modeling</h3>
+                    <p>Speed up Blender, Maya, Premiere Pro, and more!</p>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 16h12" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 8h12" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>High-Performance Computing</h3>
+                    <p>Perfect for scientific research, financial modeling, and big data analytics.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 15C15.866 15 19 11.866 19 8C19 4.134 15.866 1 12 1C8.13401 1 5 4.134 5 8C5 11.866 8.13401 15 12 15Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Gaming & Crypto Mining</h3>
+                    <p>Rent out your idle GPU after gaming or mining, and earn.</p>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.24 12.24C21.3658 11.1142 21.9983 9.58722 21.9983 7.99504C21.9983 6.40285 21.3658 4.87588 20.24 3.75004C19.1142 2.62419 17.5872 1.9917 15.995 1.9917C14.4028 1.9917 12.8758 2.62419 11.75 3.75004L5 10.5V19H13.5L20.24 12.24Z" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 8L2 22" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17.5 15H9" stroke="#4a76ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Web3 & DeFi</h3>
+                    <p>Run decentralized computing tasks and train AI-powered smart contracts!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="community" class="content-section join-section">
+        <div class="section-container">
+            <div class="join-content">
+                <h2>Join Denode & Experience the Future of GPU Computing!</h2>
+                <div class="join-description">
+                    <p>More freedom for AI computing, higher efficiency for GPU resources! Denode—where computing power is always at your fingertips!</p>
+                </div>
+                <div class="cta-buttons">
+                    <a href="https://x.com/Denode_Coin" target="_blank" rel="noopener noreferrer">
+                        <button class="primary-btn">TWITTER</button>
+                    </a>
+                    <a href="https://t.me/Denode_Official" target="_blank" rel="noopener noreferrer">
+                        <button class="secondary-btn">TELEGRAM</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Logo部分 -->
+            <div class="footer-logo">
+                <img src="assets/images/logo-transparent.png" alt="Denode Logo">
+                <div class="logo-text">
+                    <span class="logo-title">Denode</span>
+                    <span class="logo-subtitle">GPU Sharing Made Easy</span>
+                </div>
+            </div>
+
+            <!-- 链接部分 -->
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>QUICK LINKS</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#community">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 社交媒体部分 -->
+            <div class="footer-social">
+                <h4>Connect With Us</h4>
+                <div class="social-links">
+                    <a href="https://x.com/Denode_Coin" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="https://t.me/Denode_Official" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="#dextools" class="social-icon">
+                        <img src="assets/images/dextools.svg" alt="Dextools" width="24" height="24">
+                    </a>
+                    <a href="#dexscreener" class="social-icon">
+                        <img src="assets/images/dexscreener.svg" alt="Dexscreener" width="24" height="24">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 版权信息 -->
+        <div class="footer-bottom">
+            <div class="footer-container">
+                <p>&copy; 2025 Denode. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
