@@ -1419,6 +1419,16 @@ html {
         padding-top: 60px;  /* 减小顶部padding */
         min-height: auto;  /* 移除最小高度限制 */
     }
+
+    .mobile-gitbook-btn {
+        display: flex;  /* 改为flex布局 */
+        align-items: center;  /* 垂直居中 */
+        justify-content: center;  /* 水平居中 */
+        height: 38px;  /* 设置固定高度，与其他按钮一致 */
+        padding: 0 1rem;  /* 调整内边距 */
+        font-size: 0.75rem;  /* 保持字体大小一致 */
+        margin: 0;
+    }
 }
 
 /* 确保图片在所有设备上都能正确显示 */
